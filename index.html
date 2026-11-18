@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Sum Break: Free Number Merge Puzzle Game Online</title>
+<meta name="description" content="Play Sum Break free online: merge matching numbers until one circle is left. 100 levels from 3×3 to 9×9, no download, no sign-up.">
+<link rel="canonical" href="https://playsumbreakgame.xyz/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sum Break">
+<meta property="og:title" content="Sum Break: Free Number Merge Puzzle Game Online">
+<meta property="og:description" content="Play Sum Break free online: merge matching numbers until one circle is left. 100 levels from 3×3 to 9×9, no download, no sign-up.">
+<meta property="og:url" content="https://playsumbreakgame.xyz/">
+<meta property="og:image" content="https://playsumbreakgame.xyz/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Sum Break: merge matching numbers until one circle is left">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#E8ECF2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121826" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='14' cy='20' r='11' fill='%232F5BEA'/%3E%3Ccircle cx='26' cy='20' r='11' fill='%23F29E1F' fill-opacity='.9'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="sumbreak.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","name":"Sum Break","url":"https://playsumbreakgame.xyz/"},{"@type":"VideoGame","name":"Sum Break","url":"https://playsumbreakgame.xyz/","image":"https://playsumbreakgame.xyz/og.png","description":"A free number-merging logic puzzle with 100 levels.","genre":["Puzzle","Logic"],"gamePlatform":"Web browser","applicationCategory":"Game","operatingSystem":"Any","inLanguage":"en-GB","offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"}}]}</script>
+</head>
+<body>
+<div class="app" id="game">
+  <header class="bar">
+    <h1 class="brand"><a href="./"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="14" cy="20" r="11" fill="var(--accent)"/><circle cx="26" cy="20" r="11" fill="var(--hint)" fill-opacity=".9"/></svg>Sum Break</a></h1>
+    <div class="bar-right"><a class="textlink" href="how-to-play.html">Learn</a><button class="pill" id="levels" type="button" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><circle cx="6" cy="6" r="2.4"/><circle cx="12" cy="6" r="2.4"/><circle cx="18" cy="6" r="2.4"/><circle cx="6" cy="12" r="2.4"/><circle cx="12" cy="12" r="2.4"/><circle cx="18" cy="12" r="2.4"/><circle cx="6" cy="18" r="2.4"/><circle cx="12" cy="18" r="2.4"/><circle cx="18" cy="18" r="2.4"/></svg>Levels</button></div>
+  </header>
+  <div class="hud">
+    <button class="nav" id="prev" type="button" aria-label="Previous level"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div class="lvl"><strong class="lvl-name" id="lvl">Level 1</strong><span class="size" id="size">3×3</span><span class="tick" id="tick" hidden aria-label="solved">✓</span></div>
+    <button class="nav" id="next" type="button" aria-label="Next level"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+    <div class="stats"><span class="timer" id="timer" aria-label="Time">0:00</span><span class="moves" id="moves">0 moves</span></div>
+  </div>
+  <main class="stage" id="stage">
+    <div class="tray" id="tray"><div class="grid" id="grid" aria-label="Board"></div></div>
+  </main>
+  <p class="status" id="status" aria-live="polite"></p>
+  <nav class="controls" aria-label="Game controls">
+    <button class="btn" id="undo" type="button"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 010 11H11"/></svg>Undo</button>
+    <button class="btn" id="restart" type="button"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>Restart</button>
+    <button class="btn primary" id="hint" type="button"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 00-4 12.7c.6.5 1 1.3 1 2.3h6c0-1 .4-1.8 1-2.3A7 7 0 0012 2z"/></svg>Hint<span class="count" id="hintCount">3</span></button>
+  </nav>
+  <a class="more" href="#faq">How to play &amp; FAQ <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></a>
+</div>
+
+<div id="home">
+  <section class="content" aria-labelledby="howTitle">
+    <h2 class="sec-title" id="howTitle">How to Play</h2>
+    <p class="sec-sub">Learn the rules in seconds</p>
+    <ol class="steps">
+      <li><span class="n">1</span><h3>Find a match</h3><p>Spot two neighbouring circles with the same number. Neighbours sit above, below, left or right.</p></li>
+      <li><span class="n">2</span><h3>Merge them</h3><p>Drag one onto the other, or tap one and then the other. They become one circle holding their total.</p></li>
+      <li><span class="n">3</span><h3>Gaps stay empty</h3><p>The space you dragged from stays empty and nothing slides in, so think before you merge.</p></li>
+      <li><span class="n">4</span><h3>Finish with one</h3><p>Keep merging until a single circle is left on the board.</p></li>
+    </ol>
+    <p class="center"><a class="pill" href="how-to-play.html">Read the full guide</a></p>
+  </section>
+
+  <section class="content levels-list" id="all-levels" aria-labelledby="levelsTitle">
+    <h2 class="sec-title" id="levelsTitle">All 100 Levels</h2>
+    <p class="sec-sub">Every level is unlocked. Pick any board to play.</p>
+      <div class="band"><h3><span>3×3</span><small>Levels 1–10</small></h3><div class="dots"><a class="dot" data-l="0" href="level-1.html" aria-label="Level 1">1</a><a class="dot" data-l="1" href="level-2.html" aria-label="Level 2">2</a><a class="dot" data-l="2" href="level-3.html" aria-label="Level 3">3</a><a class="dot" data-l="3" href="level-4.html" aria-label="Level 4">4</a><a class="dot" data-l="4" href="level-5.html" aria-label="Level 5">5</a><a class="dot" data-l="5" href="level-6.html" aria-label="Level 6">6</a><a class="dot" data-l="6" href="level-7.html" aria-label="Level 7">7</a><a class="dot" data-l="7" href="level-8.html" aria-label="Level 8">8</a><a class="dot" data-l="8" href="level-9.html" aria-label="Level 9">9</a><a class="dot" data-l="9" href="level-10.html" aria-label="Level 10">10</a></div></div>
+      <div class="band"><h3><span>4×4</span><small>Levels 11–25</small></h3><div class="dots"><a class="dot" data-l="10" href="level-11.html" aria-label="Level 11">11</a><a class="dot" data-l="11" href="level-12.html" aria-label="Level 12">12</a><a class="dot" data-l="12" href="level-13.html" aria-label="Level 13">13</a><a class="dot" data-l="13" href="level-14.html" aria-label="Level 14">14</a><a class="dot" data-l="14" href="level-15.html" aria-label="Level 15">15</a><a class="dot" data-l="15" href="level-16.html" aria-label="Level 16">16</a><a class="dot" data-l="16" href="level-17.html" aria-label="Level 17">17</a><a class="dot" data-l="17" href="level-18.html" aria-label="Level 18">18</a><a class="dot" data-l="18" href="level-19.html" aria-label="Level 19">19</a><a class="dot" data-l="19" href="level-20.html" aria-label="Level 20">20</a><a class="dot" data-l="20" href="level-21.html" aria-label="Level 21">21</a><a class="dot" data-l="21" href="level-22.html" aria-label="Level 22">22</a><a class="dot" data-l="22" href="level-23.html" aria-label="Level 23">23</a><a class="dot" data-l="23" href="level-24.html" aria-label="Level 24">24</a><a class="dot" data-l="24" href="level-25.html" aria-label="Level 25">25</a></div></div>
+      <div class="band"><h3><span>5×5</span><small>Levels 26–45</small></h3><div class="dots"><a class="dot" data-l="25" href="level-26.html" aria-label="Level 26">26</a><a class="dot" data-l="26" href="level-27.html" aria-label="Level 27">27</a><a class="dot" data-l="27" href="level-28.html" aria-label="Level 28">28</a><a class="dot" data-l="28" href="level-29.html" aria-label="Level 29">29</a><a class="dot" data-l="29" href="level-30.html" aria-label="Level 30">30</a><a class="dot" data-l="30" href="level-31.html" aria-label="Level 31">31</a><a class="dot" data-l="31" href="level-32.html" aria-label="Level 32">32</a><a class="dot" data-l="32" href="level-33.html" aria-label="Level 33">33</a><a class="dot" data-l="33" href="level-34.html" aria-label="Level 34">34</a><a class="dot" data-l="34" href="level-35.html" aria-label="Level 35">35</a><a class="dot" data-l="35" href="level-36.html" aria-label="Level 36">36</a><a class="dot" data-l="36" href="level-37.html" aria-label="Level 37">37</a><a class="dot" data-l="37" href="level-38.html" aria-label="Level 38">38</a><a class="dot" data-l="38" href="level-39.html" aria-label="Level 39">39</a><a class="dot" data-l="39" href="level-40.html" aria-label="Level 40">40</a><a class="dot" data-l="40" href="level-41.html" aria-label="Level 41">41</a><a class="dot" data-l="41" href="level-42.html" aria-label="Level 42">42</a><a class="dot" data-l="42" href="level-43.html" aria-label="Level 43">43</a><a class="dot" data-l="43" href="level-44.html" aria-label="Level 44">44</a><a class="dot" data-l="44" href="level-45.html" aria-label="Level 45">45</a></div></div>
+      <div class="band"><h3><span>6×6</span><small>Levels 46–65</small></h3><div class="dots"><a class="dot" data-l="45" href="level-46.html" aria-label="Level 46">46</a><a class="dot" data-l="46" href="level-47.html" aria-label="Level 47">47</a><a class="dot" data-l="47" href="level-48.html" aria-label="Level 48">48</a><a class="dot" data-l="48" href="level-49.html" aria-label="Level 49">49</a><a class="dot" data-l="49" href="level-50.html" aria-label="Level 50">50</a><a class="dot" data-l="50" href="level-51.html" aria-label="Level 51">51</a><a class="dot" data-l="51" href="level-52.html" aria-label="Level 52">52</a><a class="dot" data-l="52" href="level-53.html" aria-label="Level 53">53</a><a class="dot" data-l="53" href="level-54.html" aria-label="Level 54">54</a><a class="dot" data-l="54" href="level-55.html" aria-label="Level 55">55</a><a class="dot" data-l="55" href="level-56.html" aria-label="Level 56">56</a><a class="dot" data-l="56" href="level-57.html" aria-label="Level 57">57</a><a class="dot" data-l="57" href="level-58.html" aria-label="Level 58">58</a><a class="dot" data-l="58" href="level-59.html" aria-label="Level 59">59</a><a class="dot" data-l="59" href="level-60.html" aria-label="Level 60">60</a><a class="dot" data-l="60" href="level-61.html" aria-label="Level 61">61</a><a class="dot" data-l="61" href="level-62.html" aria-label="Level 62">62</a><a class="dot" data-l="62" href="level-63.html" aria-label="Level 63">63</a><a class="dot" data-l="63" href="level-64.html" aria-label="Level 64">64</a><a class="dot" data-l="64" href="level-65.html" aria-label="Level 65">65</a></div></div>
+      <div class="band"><h3><span>7×7</span><small>Levels 66–80</small></h3><div class="dots"><a class="dot" data-l="65" href="level-66.html" aria-label="Level 66">66</a><a class="dot" data-l="66" href="level-67.html" aria-label="Level 67">67</a><a class="dot" data-l="67" href="level-68.html" aria-label="Level 68">68</a><a class="dot" data-l="68" href="level-69.html" aria-label="Level 69">69</a><a class="dot" data-l="69" href="level-70.html" aria-label="Level 70">70</a><a class="dot" data-l="70" href="level-71.html" aria-label="Level 71">71</a><a class="dot" data-l="71" href="level-72.html" aria-label="Level 72">72</a><a class="dot" data-l="72" href="level-73.html" aria-label="Level 73">73</a><a class="dot" data-l="73" href="level-74.html" aria-label="Level 74">74</a><a class="dot" data-l="74" href="level-75.html" aria-label="Level 75">75</a><a class="dot" data-l="75" href="level-76.html" aria-label="Level 76">76</a><a class="dot" data-l="76" href="level-77.html" aria-label="Level 77">77</a><a class="dot" data-l="77" href="level-78.html" aria-label="Level 78">78</a><a class="dot" data-l="78" href="level-79.html" aria-label="Level 79">79</a><a class="dot" data-l="79" href="level-80.html" aria-label="Level 80">80</a></div></div>
+      <div class="band"><h3><span>8×8</span><small>Levels 81–89</small></h3><div class="dots"><a class="dot" data-l="80" href="level-81.html" aria-label="Level 81">81</a><a class="dot" data-l="81" href="level-82.html" aria-label="Level 82">82</a><a class="dot" data-l="82" href="level-83.html" aria-label="Level 83">83</a><a class="dot" data-l="83" href="level-84.html" aria-label="Level 84">84</a><a class="dot" data-l="84" href="level-85.html" aria-label="Level 85">85</a><a class="dot" data-l="85" href="level-86.html" aria-label="Level 86">86</a><a class="dot" data-l="86" href="level-87.html" aria-label="Level 87">87</a><a class="dot" data-l="87" href="level-88.html" aria-label="Level 88">88</a><a class="dot" data-l="88" href="level-89.html" aria-label="Level 89">89</a></div></div>
+      <div class="band"><h3><span>9×9</span><small>Levels 90–100</small></h3><div class="dots"><a class="dot" data-l="89" href="level-90.html" aria-label="Level 90">90</a><a class="dot" data-l="90" href="level-91.html" aria-label="Level 91">91</a><a class="dot" data-l="91" href="level-92.html" aria-label="Level 92">92</a><a class="dot" data-l="92" href="level-93.html" aria-label="Level 93">93</a><a class="dot" data-l="93" href="level-94.html" aria-label="Level 94">94</a><a class="dot" data-l="94" href="level-95.html" aria-label="Level 95">95</a><a class="dot" data-l="95" href="level-96.html" aria-label="Level 96">96</a><a class="dot" data-l="96" href="level-97.html" aria-label="Level 97">97</a><a class="dot" data-l="97" href="level-98.html" aria-label="Level 98">98</a><a class="dot" data-l="98" href="level-99.html" aria-label="Level 99">99</a><a class="dot" data-l="99" href="level-100.html" aria-label="Level 100">100</a></div></div>
+  </section>
+
+  <section class="content" id="faq" aria-labelledby="faqTitle">
+    <h2 class="sec-title" id="faqTitle">Questions &amp; Answers</h2>
+    <p class="sec-sub">Everything you need to know about Sum Break</p>
+    <div class="faq">
+      <details open><summary><span class="qn">1</span><span class="q">What is Sum Break?</span><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary><div class="a"><p>Sum Break is a number puzzle played on a grid of circles. Merge two neighbouring circles with the same number and they combine into their total. The catch is that the space you moved from stays empty, so every merge changes which circles can still reach each other. Clear the board down to one circle to win.</p></div></details>
+      <details><summary><span class="qn">2</span><span class="q">How do you play Sum Break?</span><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary><div class="a"><p>Drag a circle onto a neighbour above, below, left or right that shows the same number, or tap one circle and then the other. The two merge in the space you dropped onto. From level 30, wildcard circles (+1, +2, +3, ×2 and ×3) join in and merge with any number. Use Undo to take back a move and Restart to begin the level again.</p></div></details>
+      <details><summary><span class="qn">3</span><span class="q">Is Sum Break free to play?</span><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary><div class="a"><p>Yes. Every level is free, with nothing to download and no account needed to start playing. It runs instantly in any modern web browser.</p></div></details>
+      <details><summary><span class="qn">4</span><span class="q">Which level should I start with?</span><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary><div class="a"><p>Start at level 1. Levels 1 to 10 use a small 3×3 board to teach the basics, then the grid grows through 4×4, 5×5, 6×6, 7×7 and 8×8, up to 9×9 for levels 90 to 100. Every level is unlocked, so you can jump ahead whenever you feel ready.</p></div></details>
+      <details><summary><span class="qn">5</span><span class="q">Can I play Sum Break on mobile?</span><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary><div class="a"><p>Yes. Sum Break is designed for phones first: drag with your finger, or tap one circle and then its partner. It works just as well on a tablet or a computer, with a mouse or keyboard shortcuts.</p></div></details>
+      <details><summary><span class="qn">6</span><span class="q">What type of puzzle is Sum Break?</span><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary><div class="a"><p>It’s a number-merging logic puzzle. Unlike games where tiles slide or new ones appear at random, nothing moves unless you move it and every board is fixed. That makes it pure planning: every level can be solved, and the challenge is finding an order that doesn’t leave a circle stranded.</p></div></details>
+      <details><summary><span class="qn">7</span><span class="q">How many puzzles are available?</span><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary><div class="a"><p>There are 100 levels across seven grid sizes: 10 at 3×3, 15 at 4×4, 20 at 5×5, 20 at 6×6, 15 at 7×7, 9 at 8×8 and 11 at 9×9. Every one is checked by computer to make sure it can be solved, and levels get harder within each size.</p></div></details>
+      <details><summary><span class="qn">8</span><span class="q">What are wildcards?</span><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary><div class="a"><p>Wildcards are the circles marked +1, +2, +3, ×2 and ×3. They merge with any number and apply their operation to it, so a 7 merged with a +1 becomes 8. Two wildcards can’t merge with each other. Numbers normally follow 1, 2, 4, 8, 16 and so on, and when one doesn’t, it starts next to the wildcard that brings it back.</p></div></details>
+      <details><summary><span class="qn">9</span><span class="q">How do hints work?</span><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary><div class="a"><p>You get 3 hints per level. A hint makes the circle to move glow and draws an arrow showing which way to drag it. If your board can no longer be finished, the hint tells you how many moves to undo instead and doesn’t use one up. Solving a level gives you a fresh 3 the next time you play it.</p></div></details>
+      <details><summary><span class="qn">10</span><span class="q">Is my progress saved?</span><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary><div class="a"><p>Yes, automatically, in your browser on this device. Solved levels, best times, hints used and unfinished boards are all kept. Clearing your browser’s data for this site, or playing on a different device or browser, starts you fresh.</p></div></details>
+      <details><summary><span class="qn">11</span><span class="q">Any tips for solving?</span><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary><div class="a"><p>Start with the smallest numbers. The smallest number on the board can only ever merge with an equal neighbour or a wildcard, because everything else only gets bigger. Keep an eye on circles in corners and along the edges, which have the fewest neighbours. And be wary of a pair that looks easy: on harder levels some matching pairs are traps that leave another circle with no partner.</p></div></details>
+    </div>
+  </section>
+
+  <section class="content blurb">
+    <p><strong>Play Sum Break free online.</strong> Sum Break is a number-merging logic puzzle you can play instantly in your browser. Match neighbouring numbers, plan around the gaps you leave behind, and clear 100 levels from quick 3×3 warm-ups to tricky 9×9 boards.</p>
+    <p>No download and no sign-up. Play on your phone, tablet or computer, in light or dark mode, and pick up where you left off whenever you come back.</p>
+  </section>
+</div>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" hidden>
+  <div class="sheet-head">
+    <div><h2 id="sheetTitle">Levels</h2><p id="sheetCount"></p></div>
+    <button class="pill" id="sheetClose" type="button">Close</button>
+  </div>
+  <div class="sheet-body"><div class="sheet-inner" id="sheetList"></div></div>
+</div>
+
+<div class="overlay" id="win" role="dialog" aria-modal="true" aria-labelledby="winTitle" hidden>
+  <div class="card">
+    <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="16" fill="var(--accent)"/><path class="check" d="M13 20.5l5 5 9-10" fill="none" stroke="var(--accent-ink)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <h2 id="winTitle">Solved</h2>
+    <p id="winTime"></p>
+    <p id="winBest"></p>
+    <div class="actions">
+      <button class="btn primary" id="winNext" type="button">Next level</button>
+      <button class="btn share" id="winShare" type="button">Share result</button>
+      <button class="btn" id="winAgain" type="button">Play again</button>
+    </div>
+  </div>
+</div>
+
+<footer class="foot">
+  <div class="foot-in">
+    <nav class="foot-links" aria-label="Site">
+      <div><h4>Play</h4><a href="./">Today’s game</a><a href="./#all-levels">All 100 levels</a><a href="level-1.html">Level 1</a></div>
+      <div><h4>Learn</h4><a href="how-to-play.html">How to Play</a><a href="./#faq">Questions &amp; Answers</a></div>
+      <div><h4>Sum Break</h4><a href="about.html">About Us</a><a href="contact.html">Contact Us</a><a href="privacy.html">Privacy Policy</a></div>
+    </nav>
+    <p class="fine">Sum Break is an independent number puzzle. Not affiliated with LinkedIn or Microsoft.</p>
+    <p class="fine">© 2026 Sum Break</p>
+  </div>
+</footer>
+
+<script>window.SB = {"root":"","site":"https://playsumbreakgame.xyz/"};</script>
+<script src="levels.js"></script>
+<script src="sumbreak.js"></script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>How to Play Sum Break: Rules, Wildcards &amp; Strategy</title>
+<meta name="description" content="Learn how to play Sum Break: how merges work, why empty spaces matter, what each wildcard does, and strategies for clearing every level.">
+<link rel="canonical" href="https://playsumbreakgame.xyz/how-to-play.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sum Break">
+<meta property="og:title" content="How to Play Sum Break: Rules, Wildcards &amp; Strategy">
+<meta property="og:description" content="Learn how to play Sum Break: how merges work, why empty spaces matter, what each wildcard does, and strategies for clearing every level.">
+<meta property="og:url" content="https://playsumbreakgame.xyz/how-to-play.html">
+<meta property="og:image" content="https://playsumbreakgame.xyz/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Sum Break: merge matching numbers until one circle is left">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#E8ECF2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121826" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='14' cy='20' r='11' fill='%232F5BEA'/%3E%3Ccircle cx='26' cy='20' r='11' fill='%23F29E1F' fill-opacity='.9'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="sumbreak.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Sum Break","item":"https://playsumbreakgame.xyz/"},{"@type":"ListItem","position":2,"name":"How to Play","item":"https://playsumbreakgame.xyz/how-to-play.html"}]}</script>
+</head>
+<body>
+<header class="site-head"><div class="bar">
+  <p class="brand"><a href="./"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="14" cy="20" r="11" fill="var(--accent)"/><circle cx="26" cy="20" r="11" fill="var(--hint)" fill-opacity=".9"/></svg>Sum Break</a></p>
+  <div class="bar-right"><a class="textlink" href="how-to-play.html">Learn</a><a class="pill" href="./">Play</a></div>
+</div></header>
+<article class="page" id="page-learn">
+  <a class="back" href="./">← Back to the game</a>
+  <h1>How to Play Sum Break</h1>
+  <p class="lead">Everything you need to go from your first merge to clearing a 9×9 board.</p>
+  <h2>The goal</h2>
+  <p>Merge the circles on the board until only one is left.</p>
+  <h2>Making a move</h2>
+  <p>Choose two circles next to each other, above, below, left or right (not diagonal), that show the same number. Drag one onto the other, or tap the first and then the second. They become a single circle showing their total, in the space you dropped onto.</p>
+  <div class="example" role="img" aria-label="Two 2s merge into a 4, leaving an empty space"><span class="mini" data-v="2" style="--c-l:hsl(148.0,74%,45%);--f-l:#141A24;--c-d:hsl(148.0,64%,37%);--f-d:#141A24">2</span><span class="mini" data-v="2" style="--c-l:hsl(148.0,74%,45%);--f-l:#141A24;--c-d:hsl(148.0,64%,37%);--f-d:#141A24">2</span><span class="to">becomes</span><span class="mini hole"></span><span class="mini" data-v="4" style="--c-l:hsl(215.0,74%,64%);--f-l:#141A24;--c-d:hsl(215.0,64%,55%);--f-d:#141A24">4</span></div>
+  <h2>Empty spaces stay empty</h2>
+  <p>After a merge, the space you dragged from stays empty for the rest of the level. Nothing slides in and no new circles appear. A circle left with no neighbours, or with only bigger numbers around it, can never be merged, and the level can’t be finished from there. That is what Undo is for.</p>
+  <h2>The numbers</h2>
+  <p>Numbers follow the sequence 1, 2, 4, 8, 16, 32 and so on, so two equal numbers always make the next one up. Numbers only ever grow, never shrink.</p>
+  <h2>Wildcards</h2>
+  <p>From level 30 you’ll meet wildcard circles. A wildcard merges with any number, in either direction, and applies its operation to it. Two wildcards can’t merge with each other.</p>
+  <div class="table-wrap"><table class="wild-table">
+    <thead><tr><th>Wildcard</th><th>What it does</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td><span class="mini wild">+1</span></td><td>Adds 1</td><td>7 becomes 8</td></tr>
+      <tr><td><span class="mini wild">+2</span></td><td>Adds 2</td><td>14 becomes 16</td></tr>
+      <tr><td><span class="mini wild">+3</span></td><td>Adds 3</td><td>5 becomes 8</td></tr>
+      <tr><td><span class="mini wild">×2</span></td><td>Doubles</td><td>16 becomes 32</td></tr>
+      <tr><td><span class="mini wild">×3</span></td><td>Triples</td><td>1 becomes 3, then a +1 makes 4</td></tr>
+    </tbody>
+  </table></div>
+  <p>A number outside the 1, 2, 4, 8 sequence always starts next to the wildcard that turns it back into one.</p>
+  <h2>Strategies</h2>
+  <ul>
+    <li><strong>Start small.</strong> The smallest number on the board can only merge with an equal neighbour or a wildcard, because everything else only gets bigger. Work out where the smallest numbers will go first.</li>
+    <li><strong>Mind the edges.</strong> Circles in corners and along the sides have fewer neighbours, so they run out of partners first.</li>
+    <li><strong>Look before you merge.</strong> On harder levels some matching pairs are decoys: merging them leaves another circle with no possible partner.</li>
+    <li><strong>Keep the board in one piece.</strong> If the circles split into two groups that don’t touch, the groups can never meet again.</li>
+    <li><strong>Undo freely.</strong> There’s no penalty for undoing, and trying a line of moves is often the quickest way to see a problem.</li>
+  </ul>
+  <h2>Hints</h2>
+  <p>You get 3 hints per level. A hint makes the circle to move glow and draws an arrow showing which way to drag it. If your board can no longer be finished, the hint tells you how many moves to undo instead, without using one up. Solving a level gives you a fresh 3 the next time you play it.</p>
+  <h2>Controls</h2>
+  <ul>
+    <li><strong>Move:</strong> drag a circle onto its partner, or tap one and then the other.</li>
+    <li><strong>Undo:</strong> the Undo button, or the Z or U key.</li>
+    <li><strong>Hint:</strong> the Hint button, or the H key.</li>
+    <li><strong>Restart:</strong> resets the board and the timer.</li>
+    <li><strong>Levels:</strong> pick any of the 100 levels. Solved ones show a tick.</li>
+  </ul>
+  <p class="center"><a class="pill" href="./">Play now</a></p>
+</article>
+
+<footer class="foot">
+  <div class="foot-in">
+    <nav class="foot-links" aria-label="Site">
+      <div><h4>Play</h4><a href="./">Today’s game</a><a href="./#all-levels">All 100 levels</a><a href="level-1.html">Level 1</a></div>
+      <div><h4>Learn</h4><a href="how-to-play.html">How to Play</a><a href="./#faq">Questions &amp; Answers</a></div>
+      <div><h4>Sum Break</h4><a href="about.html">About Us</a><a href="contact.html">Contact Us</a><a href="privacy.html">Privacy Policy</a></div>
+    </nav>
+    <p class="fine">Sum Break is an independent number puzzle. Not affiliated with LinkedIn or Microsoft.</p>
+    <p class="fine">© 2026 Sum Break</p>
+  </div>
+</footer>
+
+
+</body>
+</html>
