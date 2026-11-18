@@ -1,0 +1,45 @@
+# Keeps /ads.txt in sync with Ezoic. GitHub Pages can't do the 301 redirect Ezoic suggests,
+# so this uses Ezoic's "automated updates" method: download the file daily and commit it.
+name: Update ads.txt
+
+on:
+  schedule:
+    - cron: "17 4 * * *"   # every day at 04:17 UTC
+  workflow_dispatch:        # adds a "Run workflow" button on the Actions tab
+
+permissions:
+  contents: write
+  pages: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download ads.txt from Ezoic
+        run: |
+          curl -fsSL --retry 3 "https://srv.adstxtmanager.com/19390/playsumbreakgame.xyz" -o ads.txt.new
+          # Never replace the live file with an error page or an empty download.
+          if [ ! -s ads.txt.new ] || grep -qi "<html" ads.txt.new || ! grep -qiE ',[[:space:]]*(DIRECT|RESELLER)' ads.txt.new; then
+            echo "Download didn't look like an ads.txt file, so the current one is kept."
+            rm -f ads.txt.new
+            exit 0
+          fi
+          mv ads.txt.new ads.txt
+
+      - name: Commit and publish if it changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git add ads.txt 2>/dev/null || exit 0
+          if git diff --cached --quiet; then
+            echo "ads.txt is already up to date."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Update ads.txt from Ezoic"
+          git push
+          # Ask Pages to rebuild in case a bot commit doesn't trigger it.
+          gh api -X POST "repos/${{ github.repository }}/pages/builds" || echo "Pages will pick it up on its next build."
