@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Sum Break Level 20: 4×4 Number Puzzle, Hints &amp; Solution</title>
+<meta name="description" content="Play Sum Break level 20, a 4×4 number merge puzzle with 12 circles. Get tips on where to start or reveal the full 11-move solution.">
+<link rel="canonical" href="https://playsumbreakgame.xyz/level-20.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sum Break">
+<meta property="og:title" content="Sum Break Level 20: 4×4 Number Puzzle, Hints &amp; Solution">
+<meta property="og:description" content="Play Sum Break level 20, a 4×4 number merge puzzle with 12 circles. Get tips on where to start or reveal the full 11-move solution.">
+<meta property="og:url" content="https://playsumbreakgame.xyz/level-20.html">
+<meta property="og:image" content="https://playsumbreakgame.xyz/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Sum Break: merge matching numbers until one circle is left">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#E8ECF2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121826" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='14' cy='20' r='11' fill='%232F5BEA'/%3E%3Ccircle cx='26' cy='20' r='11' fill='%23F29E1F' fill-opacity='.9'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="sumbreak.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Sum Break","item":"https://playsumbreakgame.xyz/"},{"@type":"ListItem","position":2,"name":"Level 20","item":"https://playsumbreakgame.xyz/level-20.html"}]}</script>
+</head>
+<body>
+<div class="app" id="game">
+  <header class="bar">
+    <p class="brand"><a href="./"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="14" cy="20" r="11" fill="var(--accent)"/><circle cx="26" cy="20" r="11" fill="var(--hint)" fill-opacity=".9"/></svg>Sum Break</a></p>
+    <div class="bar-right"><a class="textlink" href="how-to-play.html">Learn</a><button class="pill" id="levels" type="button" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><circle cx="6" cy="6" r="2.4"/><circle cx="12" cy="6" r="2.4"/><circle cx="18" cy="6" r="2.4"/><circle cx="6" cy="12" r="2.4"/><circle cx="12" cy="12" r="2.4"/><circle cx="18" cy="12" r="2.4"/><circle cx="6" cy="18" r="2.4"/><circle cx="12" cy="18" r="2.4"/><circle cx="18" cy="18" r="2.4"/></svg>Levels</button></div>
+  </header>
+  <div class="hud">
+    <button class="nav" id="prev" type="button" aria-label="Previous level"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div class="lvl"><h1 class="lvl-name" id="lvl">Level 20</h1><span class="size" id="size">4×4</span><span class="tick" id="tick" hidden aria-label="solved">✓</span></div>
+    <button class="nav" id="next" type="button" aria-label="Next level"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+    <div class="stats"><span class="timer" id="timer" aria-label="Time">0:00</span><span class="moves" id="moves">0 moves</span></div>
+  </div>
+  <main class="stage" id="stage">
+    <div class="tray" id="tray"><div class="grid" id="grid" aria-label="Board"></div></div>
+  </main>
+  <p class="status" id="status" aria-live="polite"></p>
+  <nav class="controls" aria-label="Game controls">
+    <button class="btn" id="undo" type="button"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 010 11H11"/></svg>Undo</button>
+    <button class="btn" id="restart" type="button"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>Restart</button>
+    <button class="btn primary" id="hint" type="button"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 00-4 12.7c.6.5 1 1.3 1 2.3h6c0-1 .4-1.8 1-2.3A7 7 0 0012 2z"/></svg>Hint<span class="count" id="hintCount">3</span></button>
+  </nav>
+  <a class="more" href="#solve">How to solve level 20 <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></a>
+</div>
+
+<section class="content solve" id="solve" aria-labelledby="solveTitle">
+    <h2 class="sec-title" id="solveTitle">How to solve Level 20</h2>
+    <p class="sec-sub">4×4 board, 12 circles, a mid-range 4×4 levels</p>
+    <dl class="facts">
+      <div><dt>Board</dt><dd>4×4</dd></div>
+      <div><dt>Circles</dt><dd>12</dd></div>
+      <div><dt>Wildcards</dt><dd>None</dd></div>
+      <div><dt>Moves to win</dt><dd>11</dd></div>
+      <div><dt>Trap pairs</dt><dd>4</dd></div>
+      <div><dt>Last circle</dt><dd>128</dd></div>
+    </dl>
+    <h3>Where to start</h3>
+    <p>The smallest number on this board is <strong>8</strong>, and there are 8 of them. The smallest number can only ever merge with an equal neighbour or a wildcard, because everything else only gets bigger, so work out where those go first. The 8 in row 3, column 1 has only one possible partner, the 8 in row 4, column 1, so that pairing is forced.</p>
+    
+    <h3>Watch out for</h3>
+    <p>There are 4 trap pairs on this board: two equal numbers side by side where merging them either way leaves a circle that can never be finished. Before each merge, check that every neighbour of the two circles still has a partner afterwards.</p>
+    <details class="spoiler"><summary>Show the full solution (11 moves)</summary>
+      <ol class="moves">
+        <li>Row 2, column 4: drag the 8 left onto the 8 to make 16</li>
+        <li>Row 3, column 4: drag the 8 left onto the 8 to make 16</li>
+        <li>Row 4, column 1: drag the 8 up onto the 8 to make 16</li>
+        <li>Row 4, column 2: drag the 8 right onto the 8 to make 16</li>
+        <li>Row 4, column 3: drag the 16 up onto the 16 to make 32</li>
+        <li>Row 1, column 3: drag the 16 down onto the 16 to make 32</li>
+        <li>Row 3, column 1: drag the 16 right onto the 16 to make 32</li>
+        <li>Row 2, column 1: drag the 16 right onto the 16 to make 32</li>
+        <li>Row 2, column 3: drag the 32 down onto the 32 to make 64</li>
+        <li>Row 2, column 2: drag the 32 down onto the 32 to make 64</li>
+        <li>Row 3, column 2: drag the 64 right onto the 64 to make 128</li>
+      </ol>
+    </details>
+    <nav class="levelnav" aria-label="More levels"><a class="pill" href="level-19.html">← Level 19</a><a class="pill" href="./#all-levels">All levels</a><a class="pill" href="level-21.html">Level 21 →</a></nav>
+  </section>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" hidden>
+  <div class="sheet-head">
+    <div><h2 id="sheetTitle">Levels</h2><p id="sheetCount"></p></div>
+    <button class="pill" id="sheetClose" type="button">Close</button>
+  </div>
+  <div class="sheet-body"><div class="sheet-inner" id="sheetList"></div></div>
+</div>
+
+<div class="overlay" id="win" role="dialog" aria-modal="true" aria-labelledby="winTitle" hidden>
+  <div class="card">
+    <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="16" fill="var(--accent)"/><path class="check" d="M13 20.5l5 5 9-10" fill="none" stroke="var(--accent-ink)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <h2 id="winTitle">Solved</h2>
+    <p id="winTime"></p>
+    <p id="winBest"></p>
+    <div class="actions">
+      <button class="btn primary" id="winNext" type="button">Next level</button>
+      <button class="btn share" id="winShare" type="button">Share result</button>
+      <button class="btn" id="winAgain" type="button">Play again</button>
+    </div>
+  </div>
+</div>
+
+<footer class="foot">
+  <div class="foot-in">
+    <nav class="foot-links" aria-label="Site">
+      <div><h4>Play</h4><a href="./">Today’s game</a><a href="./#all-levels">All 100 levels</a><a href="level-1.html">Level 1</a></div>
+      <div><h4>Learn</h4><a href="how-to-play.html">How to Play</a><a href="./#faq">Questions &amp; Answers</a></div>
+      <div><h4>Sum Break</h4><a href="about.html">About Us</a><a href="contact.html">Contact Us</a><a href="privacy.html">Privacy Policy</a></div>
+    </nav>
+    <p class="fine">Sum Break is an independent number puzzle. Not affiliated with LinkedIn or Microsoft.</p>
+    <p class="fine">© 2026 Sum Break</p>
+  </div>
+</footer>
+
+<script>window.SB = {"root":"","site":"https://playsumbreakgame.xyz/","level":19};</script>
+<script src="levels.js"></script>
+<script src="sumbreak.js"></script>
+</body>
+</html>
