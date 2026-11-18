@@ -15,16 +15,20 @@ jobs:
   update:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Download ads.txt from Ezoic
         run: |
-          curl -fsSL --retry 3 "https://srv.adstxtmanager.com/19390/playsumbreakgame.xyz" -o ads.txt.new
-          # Never replace the live file with an error page or an empty download.
-          if [ ! -s ads.txt.new ] || grep -qi "<html" ads.txt.new || ! grep -qiE ',[[:space:]]*(DIRECT|RESELLER)' ads.txt.new; then
-            echo "Download didn't look like an ads.txt file, so the current one is kept."
+          URL="https://srv.adstxtmanager.com/19390/playsumbreakgame.xyz"
+          STATUS=$(curl -sSL --retry 3 -o ads.txt.new -w '%{http_code}' "$URL") || true
+          if [ "$STATUS" != "200" ] || [ ! -s ads.txt.new ] || grep -qi "<html" ads.txt.new || ! grep -qiE ',[[:space:]]*(DIRECT|RESELLER)' ads.txt.new; then
             rm -f ads.txt.new
-            exit 0
+            if [ -f ads.txt ]; then
+              echo "::warning::Ezoic's ads.txt link returned HTTP $STATUS, so the current ads.txt is kept."
+              exit 0
+            fi
+            echo "::error::Ezoic's ads.txt link returned HTTP $STATUS and the site has no ads.txt yet. Check the domain is added in your Ezoic dashboard, then open $URL in a browser. It should show a list of ad sellers."
+            exit 1
           fi
           mv ads.txt.new ads.txt
 
