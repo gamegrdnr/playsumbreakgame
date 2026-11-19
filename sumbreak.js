@@ -303,6 +303,8 @@ var Engine = (function () {
   var SB = window.SB || { root: '' };
   var SITE = SB.site || 'https://playsumbreakgame.xyz/';
   var FIXED = typeof SB.level === 'number';
+  var DAILY = SB.daily ? SB.dailyInfo : null;
+  function SID() { return DAILY ? 'd' + DAILY.num : String(L + 1); }
   var HINT_MS = 1500;
   var doc = document, root = doc.documentElement;
   function $(id) { return doc.getElementById(id); }
@@ -319,36 +321,24 @@ var Engine = (function () {
   var L = 0, lv = null, n = 3, init = [], cells = [], hist = [], states = [];
   var sel = -1, won = false, busy = false, drag = null, hint = null, hintCache = null, solKeys = null, search = null;
   var tiles = [], cellPx = 40, lastFocus = null, fxEl = null, arrowEl = null, viewPause = false;
-  var HINT_MAX = 3;
+  var HINT_MAX = SB.daily ? 1 : 3;
+  var undos = 0;
   var clock = { acc: 0, since: 0, on: false }, hiddenPause = false;
 
   // ---------- storage ----------
-  function load() {
-    var base = { cur: 0, solved: {}, best: {}, saves: {}, hints: {} };
-    try {
-      var s = JSON.parse(localStorage.getItem(KEY) || 'null');
-      if (s && typeof s === 'object') {
-        base.cur = s.cur | 0;
-        base.solved = s.solved && typeof s.solved === 'object' ? s.solved : {};
-        base.best = s.best && typeof s.best === 'object' ? s.best : {};
-        base.saves = s.saves && typeof s.saves === 'object' ? s.saves : {};
-        base.hints = s.hints && typeof s.hints === 'object' ? s.hints : {};
-      }
-    } catch (e) { /* storage unavailable */ }
-    return base;
-  }
+  function load() { return SBX.loadStore(); }
   function persist() {
-    store.cur = L;
+    if (!DAILY) store.cur = L;
     if (lv) {
       if (!won && hist.length) {
         var m = [];
         for (var i = 0; i < hist.length; i++) m.push(hist[i][0], hist[i][1]);
-        store.saves[L + 1] = { m: m, t: Math.round(elapsed()) };
+        store.saves[SID()] = { m: m, t: Math.round(elapsed()) };
       } else {
-        delete store.saves[L + 1];
+        delete store.saves[SID()];
       }
     }
-    try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) { /* ignore */ }
+    SBX.saveStore();
   }
 
   // ---------- clock ----------
@@ -515,9 +505,9 @@ var Engine = (function () {
     statusEl.className = 'status' + (kind ? ' ' + kind : '');
   }
   function updateHud() {
-    lvlEl.textContent = 'Level ' + (L + 1);
+    lvlEl.textContent = DAILY ? 'Daily #' + DAILY.num : 'Level ' + (L + 1);
     sizeEl.textContent = n + '×' + n;
-    tickEl.hidden = !store.solved[L + 1];
+    tickEl.hidden = !store.solved[SID()];
     movesEl.textContent = hist.length + (hist.length === 1 ? ' move' : ' moves');
     prevBtn.disabled = L <= 0;
     nextBtn.disabled = L >= LEVELS.length - 1;
@@ -535,7 +525,7 @@ var Engine = (function () {
     cells = init;
     hist = [];
     states = [init];
-    sel = -1; won = false; busy = false; drag = null; hint = null; hintCache = null;
+    sel = -1; won = false; busy = false; drag = null; hint = null; hintCache = null; undos = 0;
     solKeys = new Map();
     var c = init, k;
     for (k = 0; k < lv.s.length; k += 2) {
@@ -543,7 +533,7 @@ var Engine = (function () {
       c = E.apply(c, lv.s[k], lv.s[k + 1]);
     }
     clock = { acc: 0, since: 0, on: false };
-    var save = store.saves[L + 1];
+    var save = store.saves[SID()];
     if (save && Array.isArray(save.m)) {
       for (k = 0; k + 1 < save.m.length; k += 2) {
         if (!E.legal(cells, n, save.m[k], save.m[k + 1])) break;
@@ -557,7 +547,7 @@ var Engine = (function () {
     buildGrid();
     render();
     updateHud();
-    setStatus(hist.length ? 'Picked up where you left off.' : (L === 0 ? 'Drag a circle onto a matching neighbour, or tap one then the other.' : ''));
+    setStatus(hist.length ? 'Picked up where you left off.' : DAILY ? (DAILY.mode === 'preview' ? 'Preview: Daily #1 goes live on ' + DAILY.date + '.' : DAILY.mode === 'archive' ? 'Daily #' + DAILY.num + ' from ' + DAILY.date + '. Past dailies don’t count towards your streak.' : 'Today’s daily: one hint, so make it count.') : (L === 0 ? 'Drag a circle onto a matching neighbour, or tap one then the other.' : ''));
     if (hist.length && !E.hasMove(cells, n) && E.count(cells) > 1) setStatus('No moves left. Undo or restart.', 'warn');
     persist();
   }
@@ -604,6 +594,7 @@ var Engine = (function () {
     cancelSearch();
     hist.pop();
     states.pop();
+    undos++;
     cells = states[states.length - 1];
     sel = -1; hint = null;
     render();
@@ -614,7 +605,7 @@ var Engine = (function () {
     cancelSearch();
     hideWin();
     cells = init; hist = []; states = [init];
-    sel = -1; hint = null; won = false;
+    sel = -1; hint = null; won = false; undos = 0;
     clock = { acc: 0, since: 0, on: false };
     render();
     updateHud();
@@ -625,21 +616,26 @@ var Engine = (function () {
     won = true;
     clockStop();
     var t = Math.round(elapsed());
-    var first = !store.solved[L + 1];
-    var prev = store.best[L + 1];
-    lastResult = { level: L + 1, n: n, board: init, time: t, moves: hist.length, hints: hintsUsed() };
-    store.solved[L + 1] = 1;
-    delete store.hints[L + 1];
-    if (!prev || t < prev) store.best[L + 1] = t;
+    var first = !store.solved[SID()];
+    var prev = store.best[SID()];
+    lastResult = { level: L + 1, daily: DAILY ? DAILY.num : 0, n: n, board: init, time: t, moves: hist.length, hints: hintsUsed() };
+    store.solved[SID()] = 1;
+    delete store.hints[SID()];
+    if (!prev || t < prev) store.best[SID()] = t;
+    if (DAILY && !store.daily[DAILY.num]) store.daily[DAILY.num] = { t: t, hints: lastResult.hints, moves: hist.length, onDay: DAILY.mode === 'today' };
     persist();
     render();
     updateHud();
     setStatus('Solved!', 'good');
-    winTitle.textContent = 'Level ' + (L + 1) + ' solved';
+    winTitle.textContent = DAILY ? 'Daily #' + DAILY.num + ' solved' : 'Level ' + (L + 1) + ' solved';
     winTime.textContent = 'Time ' + fmt(t) + ' in ' + hist.length + ' moves';
     winBest.textContent = first ? 'First clear' : (t < prev ? 'New best time' : 'Best ' + fmt(prev));
     var last = L >= LEVELS.length - 1;
-    winNext.textContent = last ? 'Choose a level' : 'Next level';
+    winNext.textContent = DAILY ? 'Play the 100 levels' : last ? 'Choose a level' : 'Next level';
+    var finalCell = 0, usedX3 = false;
+    for (var fc = 0; fc < cells.length; fc++) if (cells[fc]) finalCell = fc;
+    for (var hk = 0; hk < hist.length; hk++) if (states[hk][hist[hk][0]] === -5 || states[hk][hist[hk][1]] === -5) usedX3 = true;
+    SBX.onWin({ mode: DAILY ? 'daily' : 'level', n: n, time: t, hints: lastResult.hints, undos: undos, finalCell: finalCell, firstCell: hist[0][1], usedX3: usedX3 });
     winShare.textContent = 'Share result';
     markLinks();
     celebrate();
@@ -671,7 +667,7 @@ var Engine = (function () {
       c = E.apply(c, path[i][0], path[i][1]);
     }
   }
-  function hintsUsed() { return +(store.hints[L + 1] || 0); }
+  function hintsUsed() { return +(store.hints[SID()] || 0); }
   function updateHintBtn() {
     var left = Math.max(0, HINT_MAX - hintsUsed());
     hintCountEl.textContent = String(left);
@@ -690,7 +686,7 @@ var Engine = (function () {
       (left ? left + (left === 1 ? ' hint' : ' hints') + ' left.' : 'That was your last hint for this level.'), 'hint');
   }
   function useHint(mv) {
-    store.hints[L + 1] = hintsUsed() + 1;
+    store.hints[SID()] = hintsUsed() + 1;
     persist();
     showHint(mv);
   }
@@ -811,9 +807,10 @@ var Engine = (function () {
   hintBtn.addEventListener('click', requestHint);
   prevBtn.addEventListener('click', function () { if (L > 0) goLevel(L - 1); });
   nextBtn.addEventListener('click', function () { if (L < LEVELS.length - 1) goLevel(L + 1); });
-  levelsBtn.addEventListener('click', openSheet);
+  levelsBtn.addEventListener('click', function () { if (DAILY) location.href = SB.root + 'levels.html'; else openSheet(); });
   sheetClose.addEventListener('click', closeSheet);
   winNext.addEventListener('click', function () {
+    if (DAILY) { location.href = SB.root + 'levels.html'; return; }
     if (L >= LEVELS.length - 1) { hideWin(); openSheet(); } else goLevel(L + 1);
   });
   winAgain.addEventListener('click', restart);
@@ -826,7 +823,7 @@ var Engine = (function () {
   // ---------- sharing ----------
   var SHARE_DOTS = ['🔴', '🟠', '🟡', '🟢', '🔵', '🟣', '🟤'];
   function shareText(r) {
-    var lines = ['Sum Break Level ' + r.level + ' ✅', '⏱️ ' + fmt(r.time) + '   🔁 ' + r.moves + ' moves   💡 ' + r.hints + (r.hints === 1 ? ' hint' : ' hints')];
+    var lines = [(r.daily ? 'Sum Break Daily #' + r.daily : 'Sum Break Level ' + r.level) + ' ✅', '⏱️ ' + fmt(r.time) + '   🔁 ' + r.moves + ' moves   💡 ' + r.hints + (r.hints === 1 ? ' hint' : ' hints')];
     for (var y = 0; y < r.n; y++) {
       var row = '';
       for (var x = 0; x < r.n; x++) {
@@ -838,7 +835,7 @@ var Engine = (function () {
       }
       lines.push(row);
     }
-    lines.push(SITE + 'level-' + r.level + '.html');
+    lines.push(SITE + (r.daily ? 'daily.html' : 'level-' + r.level + '.html'));
     return lines.join('\n');
   }
   function copyText(text) {
@@ -1037,6 +1034,6 @@ var Engine = (function () {
     setStatus('No levels yet. Run node tools/generate-levels.js.', 'warn');
     return;
   }
-  loadLevel(FIXED ? SB.level : store.cur);
+  loadLevel(FIXED ? SB.level : DAILY ? 0 : store.cur);
   markLinks();
 })();

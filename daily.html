@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
+<script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"></script>
+<script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
+<script>
+  window.ezstandalone = window.ezstandalone || {};
+  ezstandalone.cmd = ezstandalone.cmd || [];
+</script>
+<script src="//ezoicanalytics.com/analytics.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Sum Break Daily Puzzle: A Hard New Number Board Every Day</title>
+<meta name="description" content="Play today’s Sum Break daily puzzle: a hard new number merge board every day, from 6×6 on Mondays to 9×9 on Sundays. One hint, streaks and a shareable result.">
+<link rel="canonical" href="https://playsumbreakgame.xyz/daily.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sum Break">
+<meta property="og:title" content="Sum Break Daily Puzzle: A Hard New Number Board Every Day">
+<meta property="og:description" content="Play today’s Sum Break daily puzzle: a hard new number merge board every day, from 6×6 on Mondays to 9×9 on Sundays. One hint, streaks and a shareable result.">
+<meta property="og:url" content="https://playsumbreakgame.xyz/daily.html">
+<meta property="og:image" content="https://playsumbreakgame.xyz/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Sum Break: merge matching numbers until one circle is left">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#E8ECF2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121826" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='14' cy='20' r='11' fill='%232F5BEA'/%3E%3Ccircle cx='26' cy='20' r='11' fill='%23F29E1F' fill-opacity='.9'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="sumbreak.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Sum Break","item":"https://playsumbreakgame.xyz/"},{"@type":"ListItem","position":2,"name":"Daily puzzle","item":"https://playsumbreakgame.xyz/daily.html"}]}</script>
+</head>
+<body>
+<div class="app" id="game">
+  <header class="bar">
+    <p class="brand"><a href="./"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="14" cy="20" r="11" fill="var(--accent)"/><circle cx="26" cy="20" r="11" fill="var(--hint)" fill-opacity=".9"/></svg>Sum Break</a></p>
+    <div class="bar-right"><a class="textlink" href="how-to-play.html">Learn</a><a class="iconlink" href="achievements.html" aria-label="Achievements"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0V4z"/><path d="M17 5h3v2a3 3 0 01-3 3M7 5H4v2a3 3 0 003 3"/></svg></a><button class="pill" id="levels" type="button" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><circle cx="6" cy="6" r="2.4"/><circle cx="12" cy="6" r="2.4"/><circle cx="18" cy="6" r="2.4"/><circle cx="6" cy="12" r="2.4"/><circle cx="12" cy="12" r="2.4"/><circle cx="18" cy="12" r="2.4"/><circle cx="6" cy="18" r="2.4"/><circle cx="12" cy="18" r="2.4"/><circle cx="18" cy="18" r="2.4"/></svg>Levels</button></div>
+  </header>
+  <div class="hud">
+    <button class="nav" id="prev" type="button" aria-label="Previous level"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div class="lvl"><h1 class="lvl-name" id="lvl">Daily puzzle</h1><span class="size" id="size"></span><span class="tick" id="tick" hidden aria-label="solved">✓</span></div>
+    <button class="nav" id="next" type="button" aria-label="Next level"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+    <div class="stats"><span class="timer" id="timer" aria-label="Time">0:00</span><span class="moves" id="moves">0 moves</span></div>
+  </div>
+  <main class="stage" id="stage">
+    <div class="tray" id="tray"><div class="grid" id="grid" aria-label="Board"></div></div>
+  </main>
+  <p class="status" id="status" aria-live="polite"></p>
+  <nav class="controls" aria-label="Game controls">
+    <button class="btn" id="undo" type="button"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 010 11H11"/></svg>Undo</button>
+    <button class="btn" id="restart" type="button"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>Restart</button>
+    <button class="btn primary" id="hint" type="button"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 00-4 12.7c.6.5 1 1.3 1 2.3h6c0-1 .4-1.8 1-2.3A7 7 0 0012 2z"/></svg>Hint<span class="count" id="hintCount">3</span></button>
+  </nav>
+  <a class="more" href="#daily-info">Streak &amp; calendar <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></a>
+</div>
+
+<section class="content" id="daily-info" aria-labelledby="dailyInfoTitle">
+  <h2 class="sec-title" id="dailyInfoTitle">Your Daily Record</h2>
+  <p class="sec-sub">Solve on the day to keep your streak going.</p>
+  <div id="dailyInfo"></div>
+</section>
+<section class="content blurb">
+  <h2 class="sec-title">About the Daily Puzzle</h2>
+  <p>Every day brings a new, hard Sum Break board, the same for everyone. Boards grow through the week: 6×6 on Monday and Tuesday, 7×7 on Wednesday and Thursday, 8×8 on Friday and Saturday, and 9×9 on Sunday. Every daily has wildcards and plenty of trap pairs, and you get one hint.</p>
+  <p>A new puzzle appears at midnight your time. Solve it on the day to build your streak, then share your result.</p>
+  <p class="center"><a class="pill" href="levels.html">Play the 100 levels</a></p>
+</section>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" hidden>
+  <div class="sheet-head">
+    <div><h2 id="sheetTitle">Levels</h2><p id="sheetCount"></p></div>
+    <button class="pill" id="sheetClose" type="button">Close</button>
+  </div>
+  <div class="sheet-body"><div class="sheet-inner" id="sheetList"></div></div>
+</div>
+
+<div class="overlay" id="win" role="dialog" aria-modal="true" aria-labelledby="winTitle" hidden>
+  <div class="card">
+    <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="16" fill="var(--accent)"/><path class="check" d="M13 20.5l5 5 9-10" fill="none" stroke="var(--accent-ink)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <h2 id="winTitle">Solved</h2>
+    <p id="winTime"></p>
+    <p id="winBest"></p>
+    <div class="actions">
+      <button class="btn primary" id="winNext" type="button">Next level</button>
+      <button class="btn share" id="winShare" type="button">Share result</button>
+      <button class="btn" id="winAgain" type="button">Play again</button>
+    </div>
+  </div>
+</div>
+
+<footer class="foot">
+  <div class="foot-in">
+    <nav class="foot-links" aria-label="Site">
+      <div><h4>Play</h4><a href="daily.html">Daily puzzle</a><a href="levels.html">All 100 levels</a><a href="achievements.html">Achievements</a></div>
+      <div><h4>Learn</h4><a href="how-to-play.html">How to Play</a><a href="./#faq">Questions &amp; Answers</a></div>
+      <div><h4>Sum Break</h4><a href="about.html">About Us</a><a href="contact.html">Contact Us</a><a href="privacy.html">Privacy Policy</a></div>
+    </nav>
+    <p class="fine">Sum Break is an independent number puzzle. Not affiliated with LinkedIn or Microsoft.</p>
+    <p class="fine">© 2026 Sum Break</p>
+  </div>
+</footer>
+
+<script>window.SB = {"root":"","site":"https://playsumbreakgame.xyz/","launch":"2026-11-20","bands":[[3,1,10],[4,11,25],[5,26,45],[6,46,65],[7,66,80],[8,81,89],[9,90,100]],"daily":true};</script>
+<script src="daily.js"></script>
+<script src="common.js"></script>
+<script>SB.dailyInfo = SBX.pickDaily(DAILIES.length); var LEVELS = [DAILIES[SB.dailyInfo.index]];</script>
+<script src="sumbreak.js"></script>
+</body>
+</html>
