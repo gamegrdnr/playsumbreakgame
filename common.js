@@ -40,6 +40,18 @@ var SBX = (function () {
     return { num: num, index: num - 1, mode: mode, today: t, date: longDate(num) };
   }
 
+  // When the daily boards are regenerated, progress saved against the old boards no longer fits.
+  function syncDailySet(set) {
+    var s = loadStore();
+    if (!set || s.dailySet === set) return;
+    s.daily = {};
+    ['saves', 'hints', 'solved', 'best'].forEach(function (k) {
+      for (var key in s[k]) if (/^d\d+$/.test(key)) delete s[k][key];
+    });
+    s.dailySet = set;
+    saveStore();
+  }
+
   // A daily counts towards a streak only when it's solved on its own day.
   function streaks() {
     var d = loadStore().daily, t = todayNum(), cur = 0;
@@ -250,6 +262,6 @@ var SBX = (function () {
 
   return {
     loadStore: loadStore, saveStore: saveStore, todayNum: todayNum, longDate: longDate, sizeOfNum: sizeOfNum,
-    pickDaily: pickDaily, streaks: streaks, unlock: unlock, onWin: onWin, refresh: refresh, ACH: ACH
+    pickDaily: pickDaily, syncDailySet: syncDailySet, streaks: streaks, unlock: unlock, onWin: onWin, refresh: refresh, ACH: ACH
   };
 })();
