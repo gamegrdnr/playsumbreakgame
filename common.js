@@ -30,7 +30,7 @@ var SBX = (function () {
   function todayNum() { return Math.round((todayUTC() - launchUTC()) / DAY) + 1; }
   function dateOfNum(num) { return new Date(launchUTC() + (num - 1) * DAY); }
   function longDate(num) { var d = dateOfNum(num); return WD[d.getUTCDay()] + ' ' + d.getUTCDate() + ' ' + MON[d.getUTCMonth()]; }
-  function sizeOfNum(num) { return [9, 6, 6, 7, 7, 8, 8][dateOfNum(num).getUTCDay()]; }
+  function sizeOfNum(num) { return [4, 4, 5][num - 1] || [7, 4, 4, 5, 5, 6, 6][dateOfNum(num).getUTCDay()]; }
   // Today's daily, an earlier one from ?day=N, or a preview of #1 before launch.
   function pickDaily(total) {
     var t = todayNum(), q = /[?&]day=(\d+)/.exec(location.search), num = t, mode = 'today';

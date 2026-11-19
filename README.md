@@ -47,7 +47,7 @@ node tools/generate-dailies.js --check   # replay every daily solution
 node tools/generate-dailies.js --days=730 --launch=2026-11-20   # more days, or a new launch date
 ```
 
-- **Daily puzzle:** #1 is the launch date (`LAUNCH` in `tools/build-site.js`, which must match `--launch`). It changes at local midnight. Sizes follow the weekday: Mon–Tue 6×6, Wed–Thu 7×7, Fri–Sat 8×8, Sun 9×9. Boards come from the hardest quarter of a large pool, all with wildcards and a high count of proven trap pairs. You get 1 hint. Streaks only count dailies solved on their own day, and `daily.html?day=N` plays an earlier one. Before launch, the page shows #1 as a preview. When the 365 run out, regenerate with more `--days`.
+- **Daily puzzle:** #1 is the launch date (`LAUNCH` in `tools/build-site.js`, which must match `--launch`). It changes at local midnight. Sizes follow the weekday: Mon–Tue 4×4, Wed–Thu 5×5, Fri–Sat 6×6, Sun 7×7, with wildcards from 5×5 up. Launch week eases in with #1 and #2 at 4×4 and #3 at 5×5. Boards come from the harder half of a large pool and need at least as many proven trap pairs as the matching levels. You get 1 hint. Streaks only count dailies solved on their own day, and `daily.html?day=N` plays an earlier one. Before launch, the page shows #1 as a preview. When the 365 run out, regenerate with more `--days`.
 - **Achievements:** 28 of them, defined in `common.js`, for progress, dailies and streaks, finishing position, speed and skill. They're stored in localStorage with the rest of the progress.
 
 - Page text lives in `tools/templates/`. That covers the game header (`game.html`), the home sections and FAQ (`home.html`), the footer, and each content page.
