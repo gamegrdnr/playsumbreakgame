@@ -618,7 +618,7 @@ var Engine = (function () {
     var t = Math.round(elapsed());
     var first = !store.solved[SID()];
     var prev = store.best[SID()];
-    lastResult = { level: L + 1, daily: DAILY ? DAILY.num : 0, n: n, board: init, time: t, moves: hist.length, hints: hintsUsed() };
+    lastResult = { level: L + 1, daily: DAILY ? DAILY.num : 0, n: n, time: t, moves: hist.length, hints: hintsUsed(), undos: undos };
     store.solved[SID()] = 1;
     delete store.hints[SID()];
     if (!prev || t < prev) store.best[SID()] = t;
@@ -821,22 +821,18 @@ var Engine = (function () {
   }
 
   // ---------- sharing ----------
-  var SHARE_DOTS = ['🔴', '🟠', '🟡', '🟢', '🔵', '🟣', '🟤'];
+  // Short, Wordle-style result: no board picture, and a bare address so apps show a small link (or none)
+  // rather than a big preview card.
   function shareText(r) {
-    var lines = [(r.daily ? 'Sum Break Daily #' + r.daily : 'Sum Break Level ' + r.level) + ' ✅', '⏱️ ' + fmt(r.time) + '   🔁 ' + r.moves + ' moves   💡 ' + r.hints + (r.hints === 1 ? ' hint' : ' hints')];
-    for (var y = 0; y < r.n; y++) {
-      var row = '';
-      for (var x = 0; x < r.n; x++) {
-        var v = r.board[y * r.n + x], k = 0;
-        if (!v) { row += '⚫'; continue; }
-        if (v < 0) { row += '⭐'; continue; }
-        while ((1 << (k + 1)) <= v) k++;
-        row += SHARE_DOTS[k % SHARE_DOTS.length];
-      }
-      lines.push(row);
-    }
-    lines.push(SITE + (r.daily ? 'daily.html' : 'level-' + r.level + '.html'));
-    return lines.join('\n');
+    var host = SITE.replace(/^https?:\/\//, '').replace(/\/$/, '');
+    var stars = r.hints ? '⭐' : r.undos ? '⭐⭐' : '⭐⭐⭐';
+    var how = r.hints ? r.hints + (r.hints === 1 ? ' hint' : ' hints') : r.undos ? 'No hints' : 'No hints, no undos';
+    return [
+      (r.daily ? 'Sum Break Daily #' + r.daily : 'Sum Break Level ' + r.level) + ' 🧩',
+      r.n + '×' + r.n + ' cleared in ' + fmt(r.time),
+      stars + ' ' + how,
+      host + '/' + (r.daily ? 'daily' : 'level-' + r.level)
+    ].join('\n');
   }
   function copyText(text) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
