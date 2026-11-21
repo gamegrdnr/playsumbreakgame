@@ -5,6 +5,7 @@ contact=directsales@ezoic.com
 managerdomain=ezoic.ai
 
 ezoic.ai, 01e51e48712ad3d65a9580a62695c7d1, DIRECT
+ezoic.ai, 35ae31083b896710ccdf4c5cf63d37f0, DIRECT
 # 35
 google.com, pub-6644558441501035, DIRECT, f08c47fec0942fa0
 google.com, pub-1175987143200523, RESELLER, f08c47fec0942fa0
